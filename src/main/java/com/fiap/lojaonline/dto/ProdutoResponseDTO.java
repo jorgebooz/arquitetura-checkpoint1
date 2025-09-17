@@ -1,12 +1,16 @@
 package com.fiap.lojaonline.dto;
 
 import com.fiap.lojaonline.model.Produto;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class ProdutoDTO{
+@NoArgsConstructor
+@AllArgsConstructor
+public class ProdutoResponseDTO{
     private Long id;
     private String nome;
     private String preco;
@@ -14,9 +18,7 @@ public class ProdutoDTO{
     private String descricao;
     private Boolean ativo;
 
-    public ProdutoDTO(){}
-
-    public ProdutoDTO(Produto entity){
+    public ProdutoResponseDTO(Produto entity){
         this.id = getId();
         this.nome = getNome();
         this.preco = getPreco();
