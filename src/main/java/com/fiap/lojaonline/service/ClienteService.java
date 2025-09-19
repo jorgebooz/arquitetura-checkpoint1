@@ -1,6 +1,7 @@
 package com.fiap.lojaonline.service;
 
 import com.fiap.lojaonline.dto.ClienteRequestDTO;
+import com.fiap.lojaonline.dto.ClienteResponseDTO;
 import com.fiap.lojaonline.model.Cliente;
 import com.fiap.lojaonline.repository.ClienteRepository;
 import org.springframework.beans.BeanUtils;
@@ -28,18 +29,21 @@ public class ClienteService {
 
     //read
     @GetMapping
-    public ResponseEntity getAll() {
+    public ResponseEntity<List<ClienteResponseDTO>> getAll() {
         List<Cliente> listClientes = repository.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(listClientes);
+        List<ClienteResponseDTO> response = listClientes.stream()
+                .map(ClienteResponseDTO::new)
+                .toList();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("{/id}")
-    public ResponseEntity getById(@PathVariable(value = "id") Long id){
-        Optional cliente = repository.findById(id);
+    public ResponseEntity<?> getById(@PathVariable(value = "id") Long id){
+        Optional<Cliente> cliente = repository.findById(id);
         if(cliente.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado");
         }
-        return ResponseEntity.status(HttpStatus.FOUND).body(cliente.get());
+        return ResponseEntity.ok(new ClienteResponseDTO(cliente.get()));
     }
 
     //update

@@ -1,8 +1,10 @@
 package com.fiap.lojaonline.service;
 
 import com.fiap.lojaonline.dto.ProdutoRequestDTO;
+import com.fiap.lojaonline.dto.ProdutoResponseDTO;
 import com.fiap.lojaonline.model.Produto;
 import com.fiap.lojaonline.repository.ProdutoRepository;
+import org.apache.coyote.Response;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,18 +30,21 @@ public class ProdutoService {
 
     //read
     @GetMapping
-    public ResponseEntity getAll() {
+    public ResponseEntity<List<ProdutoResponseDTO>> getAll() {
         List<Produto> listProdutos = repository.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(listProdutos);
+        List<ProdutoResponseDTO> response = listProdutos.stream()
+                .map(ProdutoResponseDTO::new)
+                .toList();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("{/id}")
-    public ResponseEntity getById(@PathVariable(value = "id") Long id){
-        Optional produto = repository.findById(id);
+    public ResponseEntity<?> getById(@PathVariable(value = "id") Long id){
+        Optional<Produto> produto = repository.findById(id);
         if(produto.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
         }
-        return ResponseEntity.status(HttpStatus.FOUND).body(produto.get());
+        return ResponseEntity.ok(new ProdutoResponseDTO(produto.get()));
     }
 
     //update
