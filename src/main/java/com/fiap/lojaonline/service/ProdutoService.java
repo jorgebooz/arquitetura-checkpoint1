@@ -2,74 +2,65 @@ package com.fiap.lojaonline.service;
 
 import com.fiap.lojaonline.dto.ProdutoRequestDTO;
 import com.fiap.lojaonline.dto.ProdutoResponseDTO;
+import com.fiap.lojaonline.exception.ConflitoNegocioException;
+import com.fiap.lojaonline.exception.RecursoNaoEncontradoException;
 import com.fiap.lojaonline.model.Produto;
 import com.fiap.lojaonline.repository.ProdutoRepository;
-import org.apache.coyote.Response;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProdutoService {
+
     @Autowired
     private ProdutoRepository repository;
 
-    //create
-    @PostMapping
-    public ResponseEntity save(@RequestBody ProdutoRequestDTO dto){
+    // CREATE
+    public ProdutoResponseDTO save(ProdutoRequestDTO dto) {
+        // Exemplo de regra de negócio: nome do produto deve ser único
+        if (repository.existsByNome(dto.getNome())) {
+            throw new ConflitoNegocioException("Produto com este nome já cadastrado");
+        }
+
         var produto = new Produto();
         BeanUtils.copyProperties(dto, produto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(produto));
+
+        Produto saved = repository.save(produto);
+        return new ProdutoResponseDTO(saved);
     }
 
-    //read
-    @GetMapping
-    public ResponseEntity<List<ProdutoResponseDTO>> getAll() {
+    // READ ALL
+    public List<ProdutoResponseDTO> getAll() {
         List<Produto> listProdutos = repository.findAll();
-        List<ProdutoResponseDTO> response = listProdutos.stream()
-                .map(ProdutoResponseDTO::new)
-                .toList();
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return listProdutos.stream().map(ProdutoResponseDTO::new).toList();
     }
 
-    @GetMapping("{/id}")
-    public ResponseEntity<?> getById(@PathVariable(value = "id") Long id){
-        Optional<Produto> produto = repository.findById(id);
-        if(produto.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
-        }
-        return ResponseEntity.ok(new ProdutoResponseDTO(produto.get()));
+    // READ BY ID
+    public ProdutoResponseDTO getById(Long id) {
+        Produto produto = repository.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Produto não encontrado"));
+        return new ProdutoResponseDTO(produto);
     }
 
-    //update
-    @PutMapping
-    public ResponseEntity update(@PathVariable(value = "id") Long id, @RequestBody ProdutoRequestDTO dto){
-        Optional<Produto> produto = repository.findById(id);
-        if(produto.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
-        }
+    // UPDATE
+    public ProdutoResponseDTO update(Long id, ProdutoRequestDTO dto) {
+        Produto produto = repository.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Produto não encontrado"));
 
-        var produtoModel = produto.get();
-        BeanUtils.copyProperties(dto, produtoModel);
-        return ResponseEntity.status(HttpStatus.OK).body(repository.save(produtoModel));
+        BeanUtils.copyProperties(dto, produto);
+        Produto updated = repository.save(produto);
+
+        return new ProdutoResponseDTO(updated);
     }
 
-    //delete
-    @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable(value = "id") Long id){
-        Optional<Produto> produto = repository.findById(id);
-        if(produto.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
-        }
+    // DELETE
+    public void delete(Long id) {
+        Produto produto = repository.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Produto não encontrado"));
 
-        repository.delete(produto.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Produto deletado");
+        repository.delete(produto);
     }
 }
-
