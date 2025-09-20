@@ -25,12 +25,13 @@ public class ProdutoController {
     @Operation(summary = "Cria um novo produto", description = "Cadastra um produto validando nome único")
     @ApiResponse(responseCode = "201", description = "Produto criado com sucesso")
     @ApiResponse(responseCode = "400", description = "Dados inválidos ou nome duplicado")
-    public ResponseEntity<ProdutoResponseDTO> save(@RequestBody ProdutoRequestDTO dto) {
-        ProdutoResponseDTO produto = service.save(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(produto);
+    public ResponseEntity<ProdutoResponseDTO> create(@RequestBody ProdutoRequestDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(dto));
     }
 
     @GetMapping
+    @Operation(summary = "Lista todos os produtos")
+    @ApiResponse(responseCode = "200", description = "Lista de produtos retornada")
     public ResponseEntity<List<ProdutoResponseDTO>> getAll() {
         return ResponseEntity.ok(service.getAll());
     }
@@ -44,11 +45,17 @@ public class ProdutoController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Atualiza um produto existente")
+    @ApiResponse(responseCode = "200", description = "Produto atualizado com sucesso")
+    @ApiResponse(responseCode = "404", description = "Produto não encontrado")
     public ResponseEntity<ProdutoResponseDTO> update(@PathVariable Long id, @RequestBody ProdutoRequestDTO dto) {
         return ResponseEntity.ok(service.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Remove um produto por ID")
+    @ApiResponse(responseCode = "204", description = "Produto deletado com sucesso")
+    @ApiResponse(responseCode = "404", description = "Produto não encontrado")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
