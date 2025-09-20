@@ -1,30 +1,41 @@
 package com.fiap.lojaonline.dto;
 
-import com.fiap.lojaonline.model.Produto;
-import lombok.AllArgsConstructor;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import com.fiap.lojaonline.model.Produto;
+
+import java.math.BigDecimal;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class ProdutoResponseDTO{
+public class ProdutoResponseDTO {
+
+    @Schema(description = "Identificador único do produto", example = "1")
     private Long id;
+
+    @Schema(description = "Nome do produto", example = "Notebook Gamer")
     private String nome;
-    private String preco;
+
+    @Schema(description = "Preço do produto", example = "4500.50")
+    private BigDecimal preco;
+
+    @Schema(description = "Categoria do produto", example = "Eletrônicos")
     private String categoria;
+
+    @Schema(description = "Descrição detalhada do produto", example = "Notebook Gamer com 16GB RAM, SSD 512GB")
     private String descricao;
+
+    @Schema(description = "Indica se o produto está ativo", example = "true")
     private Boolean ativo;
 
-    public ProdutoResponseDTO(Produto entity){
-        this.id = getId();
-        this.nome = getNome();
-        this.preco = getPreco();
-        this.categoria = getCategoria();
-        this.descricao = getDescricao();
-        this.ativo = getAtivo();
+    // Construtor que copia propriedades da entidade
+    public ProdutoResponseDTO(Produto produto){
+        this.id = produto.getId();
+        this.nome = produto.getNome();
+        this.preco = produto.getPreco();
+        this.categoria = produto.getCategoria();
+        this.descricao = produto.getDescricao();
+        this.ativo = produto.isAtivo();
     }
-
 }
