@@ -6,6 +6,7 @@ import com.fiap.lojaonline.service.ClienteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +26,9 @@ public class ClienteController {
     @Operation(summary = "Cria um novo cliente",
             description = "Cadastra um cliente validando email e documento únicos.")
     @ApiResponse(responseCode = "201", description = "Cliente criado com sucesso")
-    @ApiResponse(responseCode = "400", description = "Dados inválidos ou email/documento duplicado")
-    public ResponseEntity<ClienteResponseDTO> create(@RequestBody ClienteRequestDTO dto) {
+    @ApiResponse(responseCode = "400", description = "Dados inválidos")
+    @ApiResponse(responseCode = "409", description = "Email/documento duplicado")
+    public ResponseEntity<ClienteResponseDTO> create(@Valid @RequestBody ClienteRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(dto));
     }
 
@@ -48,8 +50,10 @@ public class ClienteController {
     @PutMapping("/{id}")
     @Operation(summary = "Atualiza um cliente existente")
     @ApiResponse(responseCode = "200", description = "Cliente atualizado com sucesso")
+    @ApiResponse(responseCode = "400", description = "Dados inválidos")
     @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
-    public ResponseEntity<ClienteResponseDTO> update(@PathVariable Long id, @RequestBody ClienteRequestDTO dto) {
+    @ApiResponse(responseCode = "409", description = "Email/documento duplicado")
+    public ResponseEntity<ClienteResponseDTO> update(@PathVariable Long id, @Valid @RequestBody ClienteRequestDTO dto) {
         ClienteResponseDTO updated = service.update(id, dto);
         return ResponseEntity.ok(updated);
     }

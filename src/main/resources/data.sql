@@ -12,13 +12,14 @@ INSERT INTO clientes (nome, email, documento) VALUES ('VinsmokeSanji', 'blackleg
 
 
 -- PRODUTOS
-INSERT INTO produtos (nome, descricao, preco) VALUES ('Teclado Mecânico RGB', 'Teclado mecânico gamer com iluminação RGB', 499.90);
-INSERT INTO produtos (nome, descricao, preco) VALUES ('Mouse Gamer MX', 'Mouse gamer com DPI ajustável', 299.90);
-INSERT INTO produtos (nome, descricao, preco) VALUES ('Headset 7.1', 'Headset com som surround 7.1', 399.90);
-INSERT INTO produtos (nome, descricao, preco) VALUES ('Mousepad XL', 'Mousepad grande com superfície de alta precisão', 149.90);
-INSERT INTO produtos (nome, descricao, preco) VALUES ('Cadeira Gamer', 'Cadeira ergonômica gamer com encosto reclinável', 1299.90);
-INSERT INTO produtos (nome, descricao, preco) VALUES ('Monitor 144Hz', 'Monitor gamer Full HD 144Hz', 1999.90);
-INSERT INTO produtos (nome, descricao, preco) VALUES ('Placa de Captura', 'Placa de captura para streaming 4K', 799.90);
-INSERT INTO produtos (nome, descricao, preco) VALUES ('Controle Gamer', 'Controle sem fio compatível com PC/Console', 349.90);
-INSERT INTO produtos (nome, descricao, preco) VALUES ('Webcam HD', 'Webcam 1080p para streaming', 249.90);
-INSERT INTO produtos (nome, descricao, preco) VALUES ('Teclado Gamer Compact', 'Teclado compacto com switches rápidos', 399.90);
+-- PRODUTOS (com ativo)
+INSERT INTO produtos (nome, descricao, preco, ativo) VALUES ('Teclado Mecânico RGB', 'Teclado mecânico gamer com iluminação RGB', 499.90, true);
+INSERT INTO produtos (nome, descricao, preco, ativo) VALUES ('Mouse Gamer MX', 'Mouse gamer com DPI ajustável', 299.90, true);
+INSERT INTO produtos (nome, descricao, preco, ativo) VALUES ('Headset 7.1', 'Headset com som surround 7.1', 399.90, true);
+INSERT INTO produtos (nome, descricao, preco, ativo) VALUES ('Mousepad XL', 'Mousepad grande com superfície de alta precisão', 149.90, true);
+INSERT INTO produtos (nome, descricao, preco, ativo) VALUES ('Cadeira Gamer', 'Cadeira ergonômica gamer com encosto reclinável', 1299.90, true);
+INSERT INTO produtos (nome, descricao, preco, ativo) VALUES ('Monitor 144Hz', 'Monitor gamer Full HD 144Hz', 1999.90, true);
+INSERT INTO produtos (nome, descricao, preco, ativo) VALUES ('Placa de Captura', 'Placa de captura para streaming 4K', 799.90, true);
+INSERT INTO produtos (nome, descricao, preco, ativo) VALUES ('Controle Gamer', 'Controle sem fio compatível com PC/Console', 349.90, true);
+INSERT INTO produtos (nome, descricao, preco, ativo) VALUES ('Webcam HD', 'Webcam 1080p para streaming', 249.90, true);
+INSERT INTO produtos (nome, descricao, preco, ativo) VALUES ('Teclado Gamer Compact', 'Teclado compacto com switches rápidos', 399.90, true);

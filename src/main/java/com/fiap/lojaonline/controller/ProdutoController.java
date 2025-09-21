@@ -6,6 +6,7 @@ import com.fiap.lojaonline.service.ProdutoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +25,9 @@ public class ProdutoController {
     @PostMapping
     @Operation(summary = "Cria um novo produto", description = "Cadastra um produto validando nome único")
     @ApiResponse(responseCode = "201", description = "Produto criado com sucesso")
-    @ApiResponse(responseCode = "400", description = "Dados inválidos ou nome duplicado")
-    public ResponseEntity<ProdutoResponseDTO> create(@RequestBody ProdutoRequestDTO dto) {
+    @ApiResponse(responseCode = "400", description = "Dados inválidos")
+    @ApiResponse(responseCode = "409", description = "Nome duplicado")
+    public ResponseEntity<ProdutoResponseDTO> create(@Valid @RequestBody ProdutoRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(dto));
     }
 
@@ -47,8 +49,10 @@ public class ProdutoController {
     @PutMapping("/{id}")
     @Operation(summary = "Atualiza um produto existente")
     @ApiResponse(responseCode = "200", description = "Produto atualizado com sucesso")
+    @ApiResponse(responseCode = "400", description = "Dados inválidos")
     @ApiResponse(responseCode = "404", description = "Produto não encontrado")
-    public ResponseEntity<ProdutoResponseDTO> update(@PathVariable Long id, @RequestBody ProdutoRequestDTO dto) {
+    @ApiResponse(responseCode = "409", description = "Nome duplicado")
+    public ResponseEntity<ProdutoResponseDTO> update(@PathVariable Long id, @Valid @RequestBody ProdutoRequestDTO dto) {
         return ResponseEntity.ok(service.update(id, dto));
     }
 
