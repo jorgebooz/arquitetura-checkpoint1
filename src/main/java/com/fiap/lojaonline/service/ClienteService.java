@@ -20,14 +20,15 @@ public class ClienteService {
 
     // CREATE
     public ClienteResponseDTO save(ClienteRequestDTO dto){
-        // valida se já existe email
-        if(repository.existsByEmailCliente(dto.getEmail())){
+        if(repository.existsByEmail(dto.getEmail())){
             throw new ConflitoNegocioException("Email já cadastrado");
         }
+        if(repository.existsByDocumento(dto.getDocumento())){
+            throw new ConflitoNegocioException("Documento já cadastrado");
+        }
 
-        var cliente = new Cliente();
+        Cliente cliente = new Cliente();
         BeanUtils.copyProperties(dto, cliente);
-
         Cliente saved = repository.save(cliente);
         return new ClienteResponseDTO(saved);
     }
@@ -46,20 +47,18 @@ public class ClienteService {
     }
 
     // UPDATE
-    public ClienteResponseDTO update(Long id, ClienteRequestDTO dto){
+    public ClienteResponseDTO update(Long id, ClienteRequestDTO dto) {
         Cliente cliente = repository.findById(id)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente não encontrado"));
-
-        BeanUtils.copyProperties(dto, cliente);
-        Cliente updated = repository.save(cliente);
-        return new ClienteResponseDTO(updated);
+        BeanUtils.copyProperties(dto, cliente, "id");
+        Cliente saved = repository.save(cliente);
+        return new ClienteResponseDTO(saved);
     }
 
     // DELETE
     public void delete(Long id){
         Cliente cliente = repository.findById(id)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente não encontrado"));
-
         repository.delete(cliente);
     }
 }

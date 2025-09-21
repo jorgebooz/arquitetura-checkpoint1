@@ -25,7 +25,7 @@ public class ClienteController {
     @Operation(summary = "Cria um novo cliente",
             description = "Cadastra um cliente validando email e documento únicos.")
     @ApiResponse(responseCode = "201", description = "Cliente criado com sucesso")
-    @ApiResponse(responseCode = "400", description = "Dados inválidos ou email duplicado")
+    @ApiResponse(responseCode = "400", description = "Dados inválidos ou email/documento duplicado")
     public ResponseEntity<ClienteResponseDTO> create(@RequestBody ClienteRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(dto));
     }
@@ -50,7 +50,8 @@ public class ClienteController {
     @ApiResponse(responseCode = "200", description = "Cliente atualizado com sucesso")
     @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
     public ResponseEntity<ClienteResponseDTO> update(@PathVariable Long id, @RequestBody ClienteRequestDTO dto) {
-        return ResponseEntity.ok(service.update(id, dto));
+        ClienteResponseDTO updated = service.update(id, dto);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")

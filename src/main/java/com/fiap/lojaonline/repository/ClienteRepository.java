@@ -4,5 +4,6 @@ import com.fiap.lojaonline.model.Cliente;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
-    boolean existsByEmailCliente(String emailCliente);
+    boolean existsByDocumento(String documento);
+    boolean existsByEmail(String email);
 }
