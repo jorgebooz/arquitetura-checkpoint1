@@ -13,7 +13,7 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("Loja Online API")
-                        .version("1.0")
-                        .description("Documentação da API de clientes e produtos da loja online"));
+                        .version("1.0.0")
+                        .description("API para sistema de loja online"));
     }
 }
